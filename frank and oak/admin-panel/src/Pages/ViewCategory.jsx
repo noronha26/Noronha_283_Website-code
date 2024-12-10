@@ -156,12 +156,32 @@ const ViewCategory = () => {
     });
     // console.log(checkedCategories);
   };
+  
+  const handleSearchCategory=async(e)=>{
+    if(!e.target.value)return handeleFetchCategories();
+    console.log(e.target.value)
+    axios.get(
+      `${process.env.REACT_APP_API_URL}admin-panel/parent-category/search-category/${e.target.value}`
+    )
+    .then((response) => {
+      console.log(response.data);
+
+      setCategories(response.data.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   return (
     <div className="w-[90%] mx-auto my-[150px] bg-white rounded-[10px] border">
+      <div className="grid grid-cols-[1fr_4fr]">
       <span className="block h-[40px] bg-[#f8f8f9] text-[20px] text-[#303640] p-[8px_16px] border-b rounded-[10px_10px_0_0]">
         View Category
       </span>
+      <input type="text" placeholder="Search category"className="border rounded-md px-2"onChange={handleSearchCategory}/>
+      </div>
+    
       <div className="w-[90%] mx-auto my-[20px]">
         <table className="w-full">
           <thead>

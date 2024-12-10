@@ -4,44 +4,48 @@ import { colors } from "@mui/material";
 import axios from "axios";
 // import { response } from "express";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../redux/slices/cartSlice";
 // import { QuickAddButton } from "../HomeComponents/ThisJustIn";
 
 export function Card({ product, filepath }) {
   let [quickAdd, setQuickAdd] = useState(false);
-  const[selectedColor,setSelectedColor]=useState('');
-  const userData=useSelector((state)=>state.user.value);
-  const[ user, setUser ]=useState({});
+  const [selectedColor, setSelectedColor] = useState("");
+  const userData = useSelector((state) => state.user.value);
+  const [user, setUser] = useState({});
+  const dispatch = useDispatch();
 
-useEffect(()=>{
-if(userData.data)
-  setUser(userData.data)
-  console.log('user',userData);
-},[userData]);
+  useEffect(() => {
+    if (userData.data) setUser(userData.data);
+    // console.log('user',userData);
+  }, [userData]);
 
-  useEffect(()=>{
-setSelectedColor(product.color[0]._id)
-  },[product]);
+  useEffect(() => {
+    setSelectedColor(product.color[0]._id);
 
-  const handleAddToCart=(sizes)=>{
-const data ={
-  user:user._id,
-  product:product._id,
-  sizes,
-  colors:selectedColor,
- 
-};
-axios.post(`${process.env.NEXT_PUBLIC_URL}/cart/create-cart`,data)
-.then((response)=>{
-  console.log(response.data);
-})
-.catch((error)=>{
-  console.log(error);
-})
-// console.log(data);
+    console.log("product===>", product);
+  }, [product]);
 
+  const handleAddToCart = (size) => {
+    const data = {
+      user: user._id,
+      product: product._id,
+      size,
+      color: selectedColor,
+    };
 
-  }
+    axios
+      .post(`${process.env.NEXT_PUBLIC_URL}/cart/create-cart`, data)
+      .then((response) => {
+        // this makes liveupdate
+        dispatch(fetchCart(user._id));
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // console.log(data);
+  };
   return (
     <div className="cursor-pointer group">
       <div className=" w-full h-full">
@@ -50,7 +54,8 @@ axios.post(`${process.env.NEXT_PUBLIC_URL}/cart/create-cart`,data)
             className="bg-black text-white absolute right-2 top-2 z-[9999] text-[8px] sm:text-[10px] 
                     font-medium uppercase px-0.5 sm:px-1 py-0.5"
           >
-            {(((product.mrp - product.price) * 100) / product.mrp).toFixed(2)} %
+            {/* {(((product. mrp-product.price) * 100) / product. mrp).toFixed(2)} % */}
+            {(((product.mrp - product.price) * 100) / product.mrp).toFixed(2)}%
             off
           </span>
           <img
@@ -64,25 +69,21 @@ axios.post(`${process.env.NEXT_PUBLIC_URL}/cart/create-cart`,data)
             alt="Womens Denim"
           />
           <button
-            // onClick={() => setQuickAdd(true)}
             className={`
-          //     {
-          //     setQuickAdd ? <QuickAddButton
-             
-          //    > : ""
-          //  }
              w-[95%] text-center box-border bg-white py-3 text-[14px] font-medium
-             absolute bottom-2 z-[99999] left-0 bottom-0 `}
+             absolute bottom-2px z-[99999] left-0 bottom-0px `}
           >
             Quick Add
             <div className=" py-1 bg-black absolute bottom-0 w-full z-[999999] hidden group-hover:flex flex-wrap justify-around gap-2 min-h-[100%]">
-              {
-                product.size.map((sizes,index)=>(
-                  <button onClick={()=>{handleAddToCart(sizes._id)}} className="uppercase py-2 bg-white w-[19%]"
-                  key={index}>{sizes.name}</button>
-                ))
-              }
-             
+              {product.size.map((sizes, index) => (
+                <button
+                  onClick={() => handleAddToCart(sizes._id)}
+                  className="uppercase py-2 bg-white w-[19%]"
+                  key={index}
+                >
+                  {sizes.name}
+                </button>
+              ))}
             </div>
           </button>
         </div>
@@ -115,13 +116,16 @@ axios.post(`${process.env.NEXT_PUBLIC_URL}/cart/create-cart`,data)
           {product.color.length} colors
         </span>
         <div className="group-hover:flex hidden mt-1">
-          {product.color.map((colors,index) => (
-            <div key={index}co
-            style={{backgroundColor:colors.color_code}}
-
-            onClick={()=>{setSelectedColor(colors._id)}}
-                className={`ms-4 ${(selectedColor==colors._id)?'shadow-[0_0_2px_6px_black] ':''}sm:w-5 sm:h-5 h-3 w-3 rounded-full 
-                border border-black flex items-center justify-center`}></div>
+          {product.color.map((colors, index) => (
+            <div
+              key={index}
+              style={{ backgroundColor: colors.color_code }}
+              onClick={() => setSelectedColor(colors._id)}
+              className={`ms-4 ${
+                selectedColor == colors._id ? "shadow-[0_0_2px_6px_black] " : ""
+              }sm:w-5 sm:h-5 h-3 w-3 rounded-full 
+                border border-black flex items-center justify-center`}
+            ></div>
           ))}
         </div>
       </div>

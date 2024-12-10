@@ -12,7 +12,8 @@ const { createParentCategory,
     deleteParentCategory,
     multideleteteparentCategories,
     updateParentCategory,
-    activeParentCategories} = require("./admin-panel/parentCategoryControllers");
+    activeParentCategories,
+    searchParentCategory} = require("./admin-panel/parentCategoryControllers");
 //Parent color
     const { readParentColor,
      createParentColor, 
@@ -42,11 +43,17 @@ const { createProductCategory,
   productcategorieByParentCategory} = require("./admin-panel/productCategoryController");
 
 //product controllers
-  const { createProduct, readProduct, updateProducts, deleteProduct } = require("./admin-panel/productControllers");
-const { createCart } = require("./website/cartControllers");
+  const { createProduct, readProduct,
+     updateProducts, deleteProduct, deleleProducts,
+      readProducts, 
+      updateProductProduct} = require("./admin-panel/productControllers");
+
+//Cart controller
+      const { createCart, readCart, deleteCart, updateCartQuantity } = require("./website/cartControllers");
 
 //Website controller
 const { activeParentCategoriesWeb } = require("./website/parentCategoryControllers");
+const { createCheckout, setPaymentStatus } = require("./website/paymentController");
 const { activeProductCategoriesWeb } = require("./website/productCategory Controllers");
 const { activeproductsByParentCategory } = require("./website/productController");
 
@@ -101,7 +108,16 @@ module.exports={
     readProduct,
     createCart,
     updateProducts,
-    deleteProduct
+    deleteProduct,
+    readCart,
+    deleleProducts,
+    readProducts,
+    updateProductProduct,
+    deleteCart,
+    updateCartQuantity,
+    createCheckout,
+    setPaymentStatus,
+    searchParentCategory
     
    
     

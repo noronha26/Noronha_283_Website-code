@@ -13,14 +13,16 @@ const cartschema=new mongoose.Schema({
         ref:'parent_sizes'
     },
     color:
-    {type:mongoose.Schema.Types.ObjectId,
+    {
+        type:mongoose.Schema.Types.ObjectId,
         ref:'parent_color'},
+
         quantity:{
             type:Number,
             default:1
         }
 
 });
-const Cart=mongoose.model('carts',cartschema);
+const Cart=mongoose.model('cart',cartschema);
 
 module.exports=Cart;

@@ -11,6 +11,7 @@ const parentCategoryRouterWeb = require('./website/parentcategory');
 const productCatoryRouterWeb = require('./website/productCatgory');
 const productRouterWeb = require('./website/productRoutes');
 const cartRouter = require('./website/cart');
+const paymentRouter = require('./website/payment');
 
 const adminPanelRouter=express.Router();
 const websiteRouter=express.Router();
@@ -29,7 +30,8 @@ websiteRouter.use('/users',userRouter);
 websiteRouter.use('/parent-category',parentCategoryRouterWeb);
 websiteRouter.use('/product-category',productCatoryRouterWeb);
 websiteRouter.use('/products',productRouterWeb);
-websiteRouter.use('/cart',cartRouter)
+websiteRouter.use('/cart',cartRouter);
+websiteRouter.use('/payment',paymentRouter)
 
 module.exports={adminPanelRouter,
     websiteRouter,

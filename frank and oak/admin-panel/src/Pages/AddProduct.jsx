@@ -31,6 +31,7 @@ const AddProduct = () => {
   }, []);
 
   const fetchProductCategories = (e) => {
+    e.preventDefault();
     axios
       .get(
         `${process.env.REACT_APP_API_URL}admin-panel/product-category/category-by-parent-category/${e.target.value}`
@@ -45,6 +46,7 @@ const AddProduct = () => {
   };
 
   const fetchColors = () => {
+    // e.preventDefault();
     axios
       .get(
         `${process.env.REACT_APP_API_URL}admin-panel/parent-color/read-colors`
@@ -63,6 +65,7 @@ const AddProduct = () => {
       });
   };
   const fetchSizes = () => {
+    // e.preventDefault();
     axios
       .get(`${process.env.REACT_APP_API_URL}admin-panel/parent-size/read-size`)
       .then((response) => {

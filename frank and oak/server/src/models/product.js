@@ -9,35 +9,36 @@ const productSchema = new mongoose.Schema({
     images: Object,
     price: Number,
     mrp: Number,
-    parent_category: {
+    parent_category:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'parent_categories'
     },
-    product_category: {
+    
+    product_category:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'product_categories'
     },
-    size:[ {
+
+    size:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'parent_sizes'
     }],
-    color: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'parent_color'
+
+    color:[{
+    type: mongoose.Schema.Types.ObjectId,
+     ref: 'parent_color'
     }],
-    ifStock: {
-        type: Boolean,
-        default: true
-    },
-    brand: String,
+    ifStock:String,
+
+    brand:String,
     
-    status: {
+    status:{
         type: Boolean,
         default: true
 
     },
     created_at: Date,
-    updated_at: {
+    updated_at:{
         type: Date,
         default: Date.now
     }

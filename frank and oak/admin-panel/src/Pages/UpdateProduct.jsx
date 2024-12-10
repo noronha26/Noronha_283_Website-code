@@ -1,13 +1,125 @@
-import React from "react";
+
+import axios from "axios";
+
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const UpdateProduct = () => {
+const navigate=useNavigate();
+  // const params=useParams();
+  // console.log(params);
+  const{id}=useParams();
+
+const[product,setProduct]=useState({});
+const [filepath, setFilepath] = useState("");
+const [thumbnailpriview, setThumbnailPriview] = useState(null);
+const [secondaryThumbnailPreview, setSecondaryThumbnailPreview] = useState(null);
+const [galleryPreview, setGalleryPreview] = useState(null);
+ 
+const inputPriviewImage1 = (e) => {
+  const file = e.target.files[0];
+  const url = URL.createObjectURL(file);
+  setProduct({ ...product,thumbnail: file.name });
+  setThumbnailPriview(url);
+ 
+  console.log(thumbnailpriview)
+};
+
+const inputPriviewImage2 = (e) => {
+  const file = e.target.files[0];
+  const url = URL.createObjectURL(file);
+  setProduct({ ...product,secondary_thumbnail: file.name });
+  setSecondaryThumbnailPreview(url);
+ 
+  console.log(secondaryThumbnailPreview)
+};
+const inputPriviewImage3= (e) => {
+  const file = e.target.files[0];
+  const url = URL.createObjectURL(file);
+  setProduct({ ...product,images: file.name });
+  setGalleryPreview(url);
+ 
+  console.log(galleryPreview)
+};
+
+
+
+  const fetchProduct=()=>{
+    axios.get(`${process.env.REACT_APP_API_URL}admin-panel/product/read-products/${id}`)
+    .then((response)=>{
+      console.log(response.data);
+      setProduct(response.data.data);
+      setFilepath(response.data.filepath);
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  };
+
+  useEffect(()=>{fetchProduct();},[id]);
+
+
+ const  handleUpdateProducts=(e)=>{
+  e.preventDefault();
+  console.log(e.target);
+  axios.put(`${process.env.REACT_APP_API_URL}admin-panel/product/updateProduct-Product/${id}`,{
+    name:e.target.name,
+    description:e.target.description,
+    short_description:e.target.short_description,
+    thumbnail:e.target.thumbnail,
+    secondary_thumbnail:e.target.secondary_thumbnail,
+    images:e.target.images,
+    price:e.target.price,
+    mrp:e.target.mrp,
+    parent_category:e.target.parent_category,
+    product_category:e.target.product_category,
+    ifStock:e.target.ifStock,
+    brand:e.target.brand,
+    size:e.target.size,
+    color:e.target.color
+  })
+  .then((response)=>{
+    console.log(response.data);
+    let timerInterval;
+Swal.fire({
+  title: "Product updated!",
+  html: "Redirecting to view product <b></b> milliseconds.",
+  timer: 800,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading();
+    const timer = Swal.getPopup().querySelector("b");
+    timerInterval = setInterval(() => {
+      timer.textContent = `${Swal.getTimerLeft()}`;
+    }, 100);
+  },
+  willClose: () => {
+    clearInterval(timerInterval);
+
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    // console.log("I was closed by the timer");
+    navigate('/dashboard/products/view-product')
+  }
+});
+
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+
+ }
+
   return (
     <div className="w-[90%] mx-auto my-[150px] bg-white rounded-[10px] border">
       <span className="block border-b bg-[#f8f8f9] text-[#303640] text-[20px] font-bold p-[8px_16px] h-[40px] rounded-[10px_10px_0_0]">
        Update Product Details
       </span>
       <div className="w-[90%] mx-auto my-[20px]">
-        <form>
+        <form method="post" onSubmit={handleUpdateProducts}>
           <div className="w-full my-[10px]">
             <label htmlFor="product_name" className="block text-[#303640]">
               Product Name
@@ -15,8 +127,10 @@ const UpdateProduct = () => {
             <input
               type="text"
               id="product_name"
-              name="product_name"
+              name="name"
+              value={product.name}
               placeholder="Name"
+              onChange={(e)=>{setProduct({...product, name:e.target.value})}}
               className="w-full input border p-2 rounded-[5px] my-[10px]"
             />
           </div>
@@ -26,8 +140,10 @@ const UpdateProduct = () => {
             </label>
             <textarea
               id="product_desc"
-              name="product_desc"
+              name="description"
+              value={product.description}
               placeholder="Description"
+              onChange={(e)=>{setProduct({...product,description:e.target.value})}}
               rows={3}
               cols={10}
               className="w-full input border p-2 rounded-[5px] my-[10px]"
@@ -42,8 +158,10 @@ const UpdateProduct = () => {
             </label>
             <textarea
               id="product_short_desc"
-              name="product_short_desc"
+              name="short_description"
+              value={product.short_description}
               placeholder="Short Description"
+              onChange={(e)=>{setProduct({...product,short_description:e.target.value})}}
               rows={2}
               cols={10}
               className="w-full input border p-2 rounded-[5px] my-[10px]"
@@ -56,9 +174,13 @@ const UpdateProduct = () => {
             <input
               type="file"
               id="product_img"
-              name="product_img"
+              name="thumbnail"
+              onChange={inputPriviewImage1 }
+              // value={product. thumbnail}
               className="w-full input border rounded-[5px] my-[10px] category"
+              
             />
+            <img src={thumbnailpriview||filepath + product.thumbnail} className="mt-3 w-[150px]" style={{height:'170px'}}/>
           </div>
           <div className="w-full my-[10px]">
             <label htmlFor="image_animation" className="block text-[#303640]">
@@ -67,9 +189,11 @@ const UpdateProduct = () => {
             <input
               type="file"
               id="image_animation"
-              name="image_animation"
+              name="secondary_thumbnail"
+              onChange={inputPriviewImage2 }
               className="w-full input border rounded-[5px] my-[10px] category"
             />
+ <img src={secondaryThumbnailPreview||filepath + product.secondary_thumbnail} className="mt-3 w-[150px]" style={{height:'170px'}}/>
           </div>
           <div className="w-full my-[10px]">
             <label htmlFor="product_gallery" className="block text-[#303640]">
@@ -78,9 +202,11 @@ const UpdateProduct = () => {
             <input
               type="file"
               id="product_gallery"
-              name="product_gallery"
+              name=" images"
+              onChange={inputPriviewImage3 }
               className="w-full input border rounded-[5px] my-[10px] category"
             />
+            <img src={galleryPreview ||filepath + product.images} className="mt-3 w-[150px]" style={{height:'170px'}}/>
           </div>
           <div className="w-full my-[10px] grid grid-cols-[2fr_2fr] gap-[20px]">
             <div>
@@ -90,8 +216,10 @@ const UpdateProduct = () => {
               <input
                 type="text"
                 id="product_price"
-                name="product_price"
+                name="price"
+                value={product.price}
                 placeholder="Product Price"
+                onChange={(e)=>{setProduct({...product,price:e.target.value})}}
                 className="w-full input border rounded-[5px] my-[10px] p-2"
               />
             </div>
@@ -102,8 +230,10 @@ const UpdateProduct = () => {
               <input
                 type="text"
                 id="product_mrp"
-                name="product_mrp"
+                name="mrp"
+                value={product.mrp}
                 placeholder="Product MRP"
+                onChange={(e)=>{setProduct({...product,mrp:e.target.value})}}
                 className="w-full input border rounded-[5px] my-[10px] p-2"
               />
             </div>
@@ -115,6 +245,8 @@ const UpdateProduct = () => {
             <select
               id="parent_category"
               name="parent_category"
+              value={product.parent_category}
+              onChange={(e)=>{setProduct({...product,parent_category:e.target.value})}}
               className="w-full input border p-2 rounded-[5px] my-[10px] cursor-pointer"
             >
               <option value="default" selected disabled hidden>
@@ -132,9 +264,20 @@ const UpdateProduct = () => {
             <label htmlFor="product_category" className="block text-[#303640]">
               Select Product Category
             </label>
+            {/* <input
+                type="text"
+                name="product_category"
+                value={product. product_category}
+                id="product_category"
+                placeholder="product_category"
+                onChange={(e)=>{setProduct({...product,product_category:e.target.value})}}
+                className="p-2 input w-full border rounded-[5px] my-[10px]"
+              /> */}
             <select
               id="product_category"
               name="product_category"
+              value={product. product_category}
+              onChange={(e)=>{setProduct({...product,product_category:e.target.value})}}
               className="w-full input border p-2 rounded-[5px] my-[10px] cursor-pointer"
             >
               <option value="default" selected disabled hidden>
@@ -154,8 +297,10 @@ const UpdateProduct = () => {
                 Manage Stock
               </label>
               <select
-                name="stock"
+                name="ifStock"
                 id="stock"
+                value={product.ifStock}
+                onChange={(e)=>{setProduct({...product,ifStock:e.target.value})}}
                 className="p-2 input w-full border rounded-[5px] my-[10px]"
               >
                 <option value="default" selected disabled hidden>
@@ -171,9 +316,11 @@ const UpdateProduct = () => {
               </label>
               <input
                 type="text"
-                name="brand"
+                name=" brand"
+                value={product.brand}
                 id="brand"
                 placeholder="Brand"
+                onChange={(e)=>{setProduct({...product,brand:e.target.value})}}
                 className="p-2 input w-full border rounded-[5px] my-[10px]"
               />
             </div>
@@ -183,8 +330,19 @@ const UpdateProduct = () => {
               <label htmlFor="size" className="block text-[#303640]">
                 Size
               </label>
+              {/* <input
+                type="text"
+                name=" size"
+                value={product.size}
+                id="size"
+                placeholder="Size"
+                onChange={(e)=>{setProduct({...product,size:e.target.value})}}
+                className="p-2 input w-full border rounded-[5px] my-[10px]"
+              /> */}
               <select
                 name="size"
+                value={product.size}
+                onChange={(e)=>{setProduct({...product,size:e.target.value})}}
                 id="size"
                 className="p-2 input w-full border rounded-[5px] my-[10px]"
               >
@@ -202,9 +360,20 @@ const UpdateProduct = () => {
               <label htmlFor="color" className="block text-[#303640]">
                 Color
               </label>
-              <select
+              {/* <input
+                type="text"
                 name="color"
+                value={product.color}
                 id="color"
+                placeholder="Color"
+                onChange={(e)=>{setProduct({...product,color:e.target.value})}}
+                className="p-2 input w-full border rounded-[5px] my-[10px]"
+              /> */}
+              <select
+                name= "color"
+                value={product.color}
+                id="color"
+                onChange={(e)=>{setProduct({...product,color:e.target.value})}}
                 className="p-2 input w-full border rounded-[5px] my-[10px]"
               >
                 <option value="default" selected disabled hidden>
@@ -225,23 +394,24 @@ const UpdateProduct = () => {
               type="radio"
               name="status"
               id="status"
-              value="0"
+              value="true"
               className="my-[10px] mx-[20px] accent-[#5351c9]"
             />
             <span>Display</span>
             <input
               type="radio"
               name="status"
+             
               id="status"
-              value="1"
+              value="false"
               className="my-[10px] mx-[20px] accent-[#5351c9]"
               checked
             />
             <span>Hide</span>
           </div>
           <div className="w-full p-[8px_16px] my-[30px] ">
-            <button className="bg-[#5351c9] rounded-md text-white w-[100px] h-[35px]">
-              Add Product
+            <button className="bg-[#5351c9] rounded-md text-white h-[35px] px-2">
+             Update Product
             </button>
           </div>
         </form>

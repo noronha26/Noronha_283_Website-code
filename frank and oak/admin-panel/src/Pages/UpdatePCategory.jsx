@@ -147,17 +147,17 @@ Swal.fire({
             </label>
             <input
               type="radio"
-              name="categoryStatus"
+              name=" status"
               id="categoryStatus"
-              value="0"
+              value="true"
               className="input my-[10px] mx-[10px] accent-[#5351c9] cursor-pointer"
             />
             <span>Display</span>
             <input
               type="radio"
-              name="categoryStatus"
+              name=" status"
               id="categoryStatus"
-              value="1"
+              value="false"
               checked
               className="input my-[10px] mx-[10px] accent-[#5351c9] cursor-pointer"
             />

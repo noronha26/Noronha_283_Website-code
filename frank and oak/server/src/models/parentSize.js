@@ -7,11 +7,13 @@ const sizeSchema=new mongoose.Schema({
 
     },
     size:String,
+
     status:{
         type:Boolean,
          default:true
     },
     created_at:Date,
+    
     updated_at:{
         type:Date,
         default:Date.now
