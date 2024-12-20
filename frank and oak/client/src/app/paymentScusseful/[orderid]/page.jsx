@@ -8,7 +8,6 @@ function page() {
     const nav=useRouter();
     const{orderid}=useParams();
 
-   console.log(orderId)
   const [seconds, setSeconds] = useState(10);
 
   const timeCount = () => {

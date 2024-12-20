@@ -7,7 +7,7 @@ const stripe = require('stripe')('sk_test_51LiyTNSH4QsKt7gAYWZpIajuDuTSeWPEHeEro
 
 const createCheckout = async (req, res) => {
     try {
-        // console.log(req.body);
+        console.log(req.body);
         const userid = req.body.cart[0].user._id;
 
         const lineItems = req.body.cart.map((item) => ({
@@ -54,7 +54,7 @@ const createCheckout = async (req, res) => {
             payment_method_types: ['card'],
             line_items: lineItems,
             mode: 'payment',
-            success_url: `http://localhost:3000/paymentScusseful/${orderData._id} `,
+            success_url: `http://localhost:3000/paymentScusseful/${orderData._id}`,
             cancel_url: 'http://localhost:3000/cancel',
             customer: customer.id
         });

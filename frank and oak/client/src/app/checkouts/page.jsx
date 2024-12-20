@@ -39,7 +39,7 @@ export default function Checkout() {
       cart,totalPrice
     })
     .then((response)=>{
-      loadStripe('pk_test_51LiyTNSH4QsKt7gApjEgxNySurOKQbOlLuc0XxwsqJek8ItuUyPQLIwIThhZ7Q4Ut7dYzWkrlg15v5kgV2opUJF6002wEvois3 ')
+      loadStripe('pk_test_51LiyTNSH4QsKt7gApjEgxNySurOKQbOlLuc0XxwsqJek8ItuUyPQLIwIThhZ7Q4Ut7dYzWkrlg15v5kgV2opUJF6002wEvois3')
       .then((stripe)=>{
         stripe.redirectToCheckout({
           sessionId:response.data.session
