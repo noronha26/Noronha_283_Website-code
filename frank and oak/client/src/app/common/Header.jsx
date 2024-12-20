@@ -29,46 +29,41 @@ export default function Header() {
   let [menuHover, setMenuHover] = useState(0);
   let [sidebarStatus, setSidebarStatus] = useState(false);
   const [parentCategories, setParentCategories] = useState([]);
-  const [user,setUser]=useState({});
-  const[totalItems,setTotalItems]=useState(null);
+  const [user, setUser] = useState({});
+  const [totalItems, setTotalItems] = useState(null);
 
   const dispatch = useDispatch();
 
   // const user=useSelector((state)=>state.user.value);
   const category = useSelector((state) => state.parentCategory.value);
-  const userData= useSelector((state) => state.user.value);
+  const userData = useSelector((state) => state.user.value);
   const cartData = useSelector((state) => state.cart.value);
   // console.log('user =====>',user);
   // console.log("category=====>", category);
-
 
   useEffect(() => {
     if (category.data) setParentCategories(category.data);
   }, [category]);
 
-  useEffect(()=>{
-    if(userData.data)
-      setUser(userData.data)
+  useEffect(() => {
+    if (userData.data) setUser(userData.data);
     // console.log('user=>',userData)
-  },[userData]);
+  }, [userData]);
 
-  useEffect(()=>{
-    console.log('cart',cartData)
-    if(userData.data)
-    //   setUser(userData.data)
-    // console.log('user=>',userData)
-    // if(cartData.data)
-    {
-      let total=0
-      cartData.data.forEach((cartItem)=>{
-        total+=cartItem.quantity
-      })
-    
+  useEffect(() => {
+    console.log("cart", cartData);
+    if (userData.data) {
+      //   setUser(userData.data)
+      // console.log('user=>',userData)
+      // if(cartData.data)
+      let total = 0;
+      cartData.data.forEach((cartItem) => {
+        total += cartItem.quantity;
+      });
+
       setTotalItems(total);
     }
-
-  },[cartData]);
-  
+  }, [cartData]);
 
   useEffect(() => {
     dispatch(fetchParentCategory());
@@ -76,30 +71,30 @@ export default function Header() {
     const auth = Cookies.get("frank_user_auth");
     if (!auth) return;
     dispatch(verifyLogin(auth));
-  
   }, [dispatch]);
 
-
-useEffect(()=>{
-  if(user._id)
-    // console.log('user===>',user._id) 
-    dispatch(fetchCart(user._id))
-},[user])
+  useEffect(() => {
+    if (user._id)
+      // console.log('user===>',user._id)
+      dispatch(fetchCart(user._id));
+  }, [user]);
 
   return (
     <div className="fixed top-0 z-[999999] w-full">
       <TextSlider />
-      <header className="shadow-md py-2 lg:py-1 px-2 sm:px-4 md:px-10 bg-white flex justify-between">
-        <div className="  flex gap-2 sm:gap-4 items-center  basis-[70%] md:basis-[20%] lg:basis-[15%]">
+      <header className="shadow-md py-2 lg:py-1 px-2 sm:px-4 md:px-10 bg-red-300 flex justify-between">
+        {/* this div is for frank and oak */}
+        <div className=" bg-cyan-100 flex gap-2 sm:gap-4 items-center  basis-[70%] md:basis-[20%] lg:basis-[15%]">
           <RxHamburgerMenu
             onClick={() => setSidebarStatus(true)}
             className="sm:hidden block w-[22px] h-7"
           />
           <MobileSideBar sidebarStatus={sidebarStatus} />
           <span className="font-bold md:text-[18px] text-[15px]">
-            Frank And Oak
+          <Link href={`/HomeComponents/Banner`}> Frank And Oak</Link> 
           </span>
         </div>
+        {/* this is a navbar */}
         <nav className=" basis-[30%] lg:basis-[84%] md:basis-[75%]  flex items-center justify-end lg:justify-between">
           <div className="lg:block  hidden">
             <ul className="flex gap-6 text-[15px] font-medium">
@@ -171,14 +166,15 @@ useEffect(()=>{
                 <FaRegHeart className="sm:w-[22px] sm:h-7 h-5 w-[18px] cursor-pointer" />
               </Link>
             </li>
-            <li className="cursor-pointer relative" >
+            <li className="cursor-pointer relative">
               {/* this is procdedure to show the product */}
-              <BsBagPlus onClick={() => setCartStatus(true)} className="sm:w-[22px] sm:h-7 h-5 w-[18px]" />
-                <div className="absolute bottom-[40%] left-[86%]">
-                  {
-                    totalItems
-                  }
-                </div>
+              <BsBagPlus
+                onClick={() => setCartStatus(true)}
+                className="sm:w-[22px] sm:h-7 h-5 w-[18px]"
+              />
+              <div className="absolute bottom-[40%] left-[86%]">
+                {totalItems}
+              </div>
               <Cart cartStatus={cartStatus} setCartStatus={setCartStatus} />
             </li>
           </ul>

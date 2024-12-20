@@ -23,7 +23,7 @@ export function Card({ product, filepath }) {
   useEffect(() => {
     setSelectedColor(product.color[0]._id);
 
-    console.log("product===>", product);
+    console.log("product======>", product);
   }, [product]);
 
   const handleAddToCart = (size) => {

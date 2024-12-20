@@ -14,10 +14,10 @@ const productSchema = new mongoose.Schema({
         ref: 'parent_categories'
     },
     
-    product_category:{
+    product_category:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'product_categories'
-    },
+    }],
 
     size:[{
         type: mongoose.Schema.Types.ObjectId,

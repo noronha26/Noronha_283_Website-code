@@ -1,4 +1,5 @@
 import React from 'react'
+// This is a Banner
 export default function Banner() {
   return (
     <section className='w-full mt-10'>

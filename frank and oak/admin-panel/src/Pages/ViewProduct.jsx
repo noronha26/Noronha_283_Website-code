@@ -23,7 +23,7 @@ const ViewProduct = () => {
         console.log(response.data);
         setProducts(response.data.data);
         setFilepath(response.data.filepath);
-        console.log(products);
+         console.log(products);
       })
       .catch((error) => {
         console.log(error);
@@ -48,9 +48,9 @@ const ViewProduct = () => {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your work has been saved",
+          title: "status updated",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 800,
         });
 
         handleFetchProduct();

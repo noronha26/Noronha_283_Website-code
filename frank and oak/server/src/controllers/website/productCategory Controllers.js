@@ -3,7 +3,7 @@ const ProductCategory = require("../../models/productCategory");
 const activeProductCategoriesWeb = async (req, res) => {
     try {
         const data = await ProductCategory.find({status:true}).populate('parent_category');
-        //here i have removed one slash(/)
+     
         const filepath = ` ${req.protocol}://${req.get('host')}/frank-and-oak-admin-files/`;
         res.status(200).json({ message: 'success', data, filepath });
 

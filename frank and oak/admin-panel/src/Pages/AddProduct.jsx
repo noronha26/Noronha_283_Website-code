@@ -1,13 +1,20 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import Swal from "sweetalert2";
 
 const AddProduct = () => {
+  const navigate=useNavigate();
   const [parentCategories, setParentCategories] = useState([]);
   const [productCategories, setProductCategories] = useState([]);
   const [colors, setcolors] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [priview1, setPriview1] = useState(" ");
+  const [priview2, setPriview2] = useState(" ");
+  const [priview3, setPriview3] = useState(" ");
+  
 
   //THis is code from Parent Category, there is no need off writting a code again
   const fetchParentCategories = () => {
@@ -82,6 +89,7 @@ const AddProduct = () => {
       });
   };
   const handleAddProduct = (e) => {
+   
     e.preventDefault();
     axios
       .post(
@@ -92,10 +100,58 @@ const AddProduct = () => {
       .then((response) => {
         console.log(e.target);
         console.log(response.data);
+        let timerInterval;
+        Swal.fire({
+          title: "Category added!",
+          html: "You will be redirected to view page <b></b> milliseconds.",
+          timer: 600,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+              timer.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            // console.log("I was closed by the timer");
+            navigate("/dashboard/products/view-product");
+          }
+        });
+
+
       })
       .catch((error) => {
         console.log(error);
+
+        if (error.status === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "Category already exists",
+            text: "Please enter a different category",
+          });
+        }
       });
+  };
+  const inputPriviewImage1 = (e) => {
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    setPriview1(url);
+  };
+  const inputPriviewImage2 = (e) => {
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    setPriview2(url);
+  };
+  const inputPriviewImage3= (e) => {
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    setPriview3(url);
   };
 
   return (
@@ -154,8 +210,10 @@ const AddProduct = () => {
               type="file"
               id="product_img"
               name="thumbnail"
+              onChange={inputPriviewImage1}
               className="w-full input border rounded-[5px] my-[10px] category"
             />
+            {priview1 && <img src={priview1} alt="" className="w-[150px]" />}
           </div>
           <div className="w-full my-[10px]">
             <label htmlFor="image_animation" className="block text-[#303640]">
@@ -165,8 +223,10 @@ const AddProduct = () => {
               type="file"
               id="image_animation"
               name="secondary_thumbnail"
+              onChange={inputPriviewImage2}
               className="w-full input border rounded-[5px] my-[10px] category"
             />
+            {priview2 && <img src={priview2} alt="" className="w-[150px]" />}
           </div>
           <div className="w-full my-[10px]">
             <label htmlFor="product_gallery" className="block text-[#303640]">
@@ -176,9 +236,11 @@ const AddProduct = () => {
               type="file"
               id="product_gallery"
               name="images"
+              onChange={inputPriviewImage3}
               multiple
               className="w-full input border rounded-[5px] my-[10px] category"
             />
+              {priview3 && <img src={priview3} alt="" className="w-[150px]" />}
           </div>
           <div className="w-full my-[10px] grid grid-cols-[2fr_2fr] gap-[20px]">
             <div>

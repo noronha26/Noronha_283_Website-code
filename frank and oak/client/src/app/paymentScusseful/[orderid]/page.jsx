@@ -8,7 +8,7 @@ function page() {
     const nav=useRouter();
     const{orderid}=useParams();
 
-   
+   console.log(orderId)
   const [seconds, setSeconds] = useState(10);
 
   const timeCount = () => {
@@ -28,9 +28,12 @@ function page() {
   useEffect(() => {
     timeCount();
     if(!orderid) return;
-    axios.put(`${process.env.NEXT_PUBLIC_URL}/payment/update-payment-status/${orderid}`,{status:'successfull'})
-    .then((response)=>{
+    axios.put(`${process.env.NEXT_PUBLIC_URL}/payment/update-payment-status/${orderid}`,{status:'successfull',
+    })
+    .then(()=>{
         console.log(response.data)
+        // console.log('userId=====>',userId)
+        // clearCart(); // Clear cart on frontend
     })
     .catch((error)=>{
         console.log(error);

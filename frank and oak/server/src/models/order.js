@@ -14,6 +14,10 @@ const oderSchema = new mongoose.Schema({
         enum: ['pending', 'failed', 'successfull'],
         default: 'pending',
     },
+    // product:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     ref:'products'
+    // },
     createdAt: {
         type: Date
 
@@ -21,7 +25,11 @@ const oderSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    // email:{
+    //     type:String,
+    //     required:true
+    // }
 
 
 });

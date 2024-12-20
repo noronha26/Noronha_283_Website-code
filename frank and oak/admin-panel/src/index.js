@@ -95,7 +95,7 @@ const routes = createBrowserRouter(
       <Route path="/dashboard/stories/add-story" element={<StoryDetails />} />,
       <Route path="/dashboard/stories/view-story" element={<ViewStory />} />,
       <Route
-        path="/dashboard/stories/update-stories"
+        path="/dashboard/stories/update-stories/:id"
         element={<UpdateStories />}
       />
       ,
@@ -103,7 +103,7 @@ const routes = createBrowserRouter(
       <Route path="/dashboard/slider/add-slider" element={<AddSlider />} />,
       <Route path="/dashboard/slider/view-slider" element={<ViewSlider />} />,
       <Route
-        path="/dashboard/slider/update-slider"
+        path="/dashboard/slider/update-slider/:id"
         element={<UpdateSlider />}
       />
       ,

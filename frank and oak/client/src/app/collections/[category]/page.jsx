@@ -64,29 +64,8 @@ export default function Category() {
                     <Card key={index} product={product} filepath={filepath}/>
                   ))
                 }
-                {/* <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/> */}
+                
+               
             </div>
             <div className='text-center mt-10'>
                 <span className='text-[14px] font-mediumtext-[#666] block'>40 of 99</span>

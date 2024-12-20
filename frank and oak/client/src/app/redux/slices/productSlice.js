@@ -23,13 +23,13 @@ const initialState={
     error:null
 };
 export const productSlice=createSlice({
-    name:'productCategory',
+    name:'products',
     initialState,
     reducers:{},
     extraReducers:(builder)=>{
 builder
 .addCase(fetchProducts.fulfilled,(state,action)=>{
-    console.log('products=>',action.payload);
+    console.log('products==>',action.payload);
     state.value=action.payload;
 
 })

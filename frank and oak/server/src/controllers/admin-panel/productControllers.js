@@ -10,12 +10,10 @@ const createProduct = async (req, res) => {
         // console.log(req.files)
         if (req.files) {
             if (req.files.thumbnail) data.thumbnail = req.files.thumbnail[0].filename;
-            if (req.files.thumbnail) data.secondary_thumbnail = req.files.secondary_thumbnail[0].filename;
+            if (req.files.secondary_thumbnail) data.secondary_thumbnail = req.files.secondary_thumbnail[0].filename;
             if (req.files.images) data.images = req.files.images.map((image) => image.filename);
 
-
         }
-
 
         const dataTosave = new Product(data);
         const response = await dataTosave.save();
@@ -86,9 +84,11 @@ const deleteProduct = async (req, res) => {
 const deleleProducts = async (req, res) => {
     try {
         console.log(req.body)
-        const data=await Product.deleteMany({_id:{
-            $in:req.body.checkedProduct
-        }})
+        const data = await Product.deleteMany({
+            _id: {
+                $in: req.body.checkedProduct
+            }
+        })
         res.status(200).json({ message: 'success' })
     }
     catch (error) {
@@ -97,36 +97,44 @@ const deleleProducts = async (req, res) => {
 
     }
 };
-const readProducts=async(req,res)=>{
-try{
-    const data=await Product.findOne(req.params);
-const filepath = ` ${req.protocol}://${req.get('host')}/frank-and-oak-admin-files/`
-    res.status(200).json({ message: 'success',data,filepath})
-}
-catch(error){
-    console.log(error);
-    res.status(500).json({ message: 'internal server error' })
-}
+const readProducts = async (req, res) => {
+    try {
+        const data = await Product.findOne(req.params);
+        const filepath = ` ${req.protocol}://${req.get('host')}/frank-and-oak-admin-files/`
+        res.status(200).json({ message: 'success', data, filepath })
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'internal server error' })
+    }
 };
 
-const updateProductProduct=async(req,res)=>{
-    
-    try{
-        console.log(req.body,req.params);
+const updateProductProduct = async (req, res) => {
+
+    try {
+        console.log(req.body, req.params);
         const data = req.body;
         if (req.files) {
             if (req.files.thumbnail) data.thumbnail = req.files.thumbnail[0].filename;
+            if (req.files.secondary_thumbnail)
+                data.secondary_thumbnail = req.files.secondary_thumbnail[0].filename;
+
+            if (req.files.images)
+                data.images = req.files.images[0].filename;
+
         }
         console.log(data)
-        const datatoSave =await Product.updateOne(
+
+        const datatoSave = await Product.updateOne(
             req.params,
             {
-                $set:data
+                $set: data
             }
 
         );
-       
-        res.status(200).json({ message: 'success',data:datatoSave}) 
+
+        console.log(datatoSave)
+        res.status(200).json({ message: 'success', data: datatoSave })
     }
     catch (error) {
         console.log(error);

@@ -5,6 +5,8 @@ import  parentCategorySlice  from "./slices/parentCategoryslices";
 import productCategorySlice  from "./slices/productCategorySlices";
 import productSlice  from "./slices/productSlice";
 import  cartSlice  from "./slices/cartSlice";
+import megaMeenuSlice from "./slices/megaMenuSlice";
+import megaMenuproductSlice from "./slices/megaMenuproductslice";
 
 export const store =configureStore({
     reducer:{
@@ -12,7 +14,10 @@ export const store =configureStore({
         parentCategory:parentCategorySlice,
         productCategory:productCategorySlice,
         products:productSlice,
-        cart:cartSlice
+        cart:cartSlice,
+        megaMenu:megaMeenuSlice,
+        megaProduct:megaMenuproductSlice
+
 
 
     }

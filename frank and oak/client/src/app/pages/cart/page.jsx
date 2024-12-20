@@ -25,6 +25,7 @@ export default function Cart({ cartStatus, setCartStatus }) {
     if (cartData.data) setCart(cartData.data);
 
     if (cartData.filepath) setFilepath(cartData.filepath);
+    
     if (cartData.data) {
       let total = 0;
       cartData.data.forEach((item) => {
