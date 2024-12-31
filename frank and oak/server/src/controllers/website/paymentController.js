@@ -1,4 +1,5 @@
 
+const Cart = require('../../models/cart');
 const Order = require('../../models/order');
 
 // const stripe = require('stripe')('sk_test_51LiyTNSH4QsKt7gAYWZpIajuDuTSeWPEHeErouhsUMtjITkHYE1cLM96gn6LvqicLVyyuy0D32wz2IK60S74ERLy00xyqVFrDo');
@@ -121,10 +122,84 @@ const setPaymentStatus = async (req, res) => {
     console.log(response.data)
     res.status(200).json({ message: 'success' });
 };
+// const clearCart=async(req,res)=>{
+//     const data=await Order.deleteMany( { _id: orderData._id },
+//         {
+//             $set: {
+//                 session
 
+// }
+// })
+//     console.log('clearData===>',data)
+// }
+
+const clearCart = async (req, res) => {
+    try {
+        const {userId } = req.body;
+        console.log(userId);
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required to clear the cart.' });
+        }
+        console.log('Clearing cart for user:', userId);
+        // Clear the cart items for the given user
+        const data = await Cart.deleteMany({ user: userId });
+
+        console.log('Cart cleared for user:', userId);
+        console.log('clearData===>', data);
+
+        res.status(200).json({ message: 'Cart cleared successfully', data });
+    } catch (error) {
+        console.error('Error clearing cart:', error.message);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+}
+const updatedCartpayment=async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required." });
+          }
+      
+        const cartItems = await Cart.find({ user: userId });
+
+        console.log(cartItems)
+        res.status(200).json({message:'success',data:cartItems});
+    } catch (error) {
+        console.error('Error fetching cart items:', error.message);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+// const clearCart = async (req, res) => {
+//     const { userId } = req.body;
+
+//     console.log(userId);
+
+//     if (!userId) {
+//         return res.status(400).json({ message: "User ID is required." });
+//     }
+
+//     try {
+//         const cartItems = await Cart.find({ user: userId });
+
+//         if (cartItems.length === 0) {
+//             return res.status(404).json({ message: "No items found in the cart." });
+//         }
+
+//         const deleteResult = await Cart.deleteMany({ user: userId });
+//         res.status(200).json({ message: "Cart cleared successfully.", deleted: deleteResult.deletedCount });
+//     } catch (error) {
+//         console.error("Error clearing cart:", error.message);
+//         res.status(500).json({ message: "Server error clearing cart.", error: error.message });
+//     }
+// };
 
 
 module.exports = {
     createCheckout,
-    setPaymentStatus
+    setPaymentStatus,
+    clearCart,
+    updatedCartpayment
 }

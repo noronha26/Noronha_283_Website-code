@@ -69,12 +69,12 @@ const { activeMenusByProductCategory } = require("./website/menuControllers");
 
 //Website controller
 const { activeParentCategoriesWeb } = require("./website/parentCategoryControllers");
-const { createCheckout, setPaymentStatus } = require("./website/paymentController");
+const { createCheckout, setPaymentStatus, clearCart } = require("./website/paymentController");
 const { activeProductCategoriesWeb } = require("./website/productCategory Controllers");
 const { activeproductsByParentCategory } = require("./website/productController");
 
 //user
-const { generateOtpWeb, registerUser, verifyJwt } = require("./website/userControllers");
+const { generateOtpWeb, registerUser, verifyJwt, userLogin } = require("./website/userControllers");
 
 
 
@@ -152,7 +152,9 @@ module.exports = {
     activeMenusByProductCategory,
     createOrder,
     readorder,
-    deleteOrders
+    deleteOrders,
+    clearCart,
+    userLogin
 
 
 

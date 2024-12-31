@@ -7,6 +7,9 @@ const userSchema=new mongoose.Schema({
       type:String,
       unique:true  
     },
+    facebook:String,
+    google:String,
+
     password:String,
     created_at:Date,
 

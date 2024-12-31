@@ -51,18 +51,33 @@ export default function Header() {
   }, [userData]);
 
   useEffect(() => {
-    console.log("cart", cartData);
-    if (userData.data) {
+    console.log("cartData", cartData);
+    // if (userData.data) 
+    if (Array.isArray(cartData.data)) 
+
+      {
       //   setUser(userData.data)
       // console.log('user=>',userData)
       // if(cartData.data)
-      let total = 0;
-      cartData.data.forEach((cartItem) => {
-        total += cartItem.quantity;
-      });
 
+
+      // let total = 0;
+      // cartData.data.forEach((cartItem) => {
+      //   total += cartItem.quantity;
+      // });
+
+      const total = cartData.data.reduce((sum, item) => sum + item.quantity, 0);
+      console.log("Total items:", total);
+      console.log("Total quantity: ", total);
       setTotalItems(total);
     }
+    else {
+      console.log("Cart data is not an array:", cartData.data);
+      // Handle the case where cartData.data is not an array, e.g., reset the total
+      let total = 0; 
+      console.log("Total quantity: ", total);
+    }
+
   }, [cartData]);
 
   useEffect(() => {
@@ -173,7 +188,7 @@ export default function Header() {
                 className="sm:w-[22px] sm:h-7 h-5 w-[18px]"
               />
               <div className="absolute bottom-[40%] left-[86%]">
-                {totalItems}
+                {totalItems > 0 ?totalItems: ""}
               </div>
               <Cart cartStatus={cartStatus} setCartStatus={setCartStatus} />
             </li>

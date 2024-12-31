@@ -25,8 +25,11 @@ export default function Cart({ cartStatus, setCartStatus }) {
     if (cartData.data) setCart(cartData.data);
 
     if (cartData.filepath) setFilepath(cartData.filepath);
-    
-    if (cartData.data) {
+
+    // if (cartData.data.length===0)
+    if (Array.isArray(cartData.data) && cartData.data.length > 0)
+      {
+     
       let total = 0;
       cartData.data.forEach((item) => {
         total += item.product.price * item.quantity;
@@ -34,6 +37,16 @@ export default function Cart({ cartStatus, setCartStatus }) {
       setItems(cartData.data.length);
       setTotalPrice(total);
      }
+     else{
+      console.log("Your cart is empty.");
+      setTotalPrice(0); // Optional, if you want to reset total
+      setItems(0); // Optional, if you want to reset items count
+    }
+  
+    // if (cartData && cartData.data && Array.isArray(cartData.data)) 
+      
+   
+     console.log('cartData.data:', cartData.data);
   }, [cartData]);
   return (
     <>
@@ -56,13 +69,18 @@ export default function Cart({ cartStatus, setCartStatus }) {
             </div>
             <div className="md:px-8 px-4 pb-[200px] lg:h-screen h-full overflow-y-scroll">
               {
-              cart.map((product,index) => (
-                <CartProducts
-                  key={index}
-                  product={product}
-                  filepath={filepath}
-                />
-              ))}
+                 Array.isArray(cart) && cart.length > 0 ?(
+                  cart.map((product,index) => (
+                    <CartProducts
+                      key={index}
+                      product={product}
+                      filepath={filepath}
+                    />
+                  ))
+                 ):(
+                  <div>Your cart is empty or invalid. Please continue shopping.</div>
+                 )
+             }
             </div>
             <div className="sticky bottom-0 px-8 bg-[#f9f9f9] py-4">
               <div className="flex items-center justify-between">
@@ -115,7 +133,7 @@ axios
         console.log(error)
       })
   };
-
+//handle clearCart
   
 
   return (

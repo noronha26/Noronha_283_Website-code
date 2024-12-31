@@ -4,9 +4,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../redux/slices/cartSlice";
 export default function Checkout() {
   let [orderSummary, setOrderSummary] = useState(false);
+  const dispatch = useDispatch()
   const [cart, setCart] = useState([]);
   const [filepath, setFilepath] = useState("");
   const [items, setItems] = useState(null);
@@ -43,6 +45,9 @@ export default function Checkout() {
       .then((stripe)=>{
         stripe.redirectToCheckout({
           sessionId:response.data.session
+        })
+        .then(()=>{
+          useEffect(dispatch(fetchCart));
         })
       })
       console.log(response.data);

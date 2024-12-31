@@ -110,7 +110,7 @@ function Profile() {
                       filepath + admin.thumbnail ||
                       "/profile.jpg"
                     }
-                    alt="profile img"
+                    alt=""
                     className="w-full h-full rounded-[50%]"
                   />
                 </div>
